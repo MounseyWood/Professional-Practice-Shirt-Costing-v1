@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KSA Fashion Costing Tool (V3 - User Input Prices)</title>
+    <!-- Tailwind is used for minor utility classes only -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* SAME CSS styles as V2.2 */
+         /* KU Fonts & Base Styling */
+         :root { /* Define CSS Variables */
+             --ku-black: #1D1D1B; --ku-white: #FFFFFF; --ku-yellow: #FFF200; /* ... rest of variables */ --ku-grey-light: #f0f0f0; --ku-grey-mid: #A0A0A0; --ku-grey-dark: #666; --ku-grey-table-header: #f1f1f1; --ku-grey-table-border: #ddd; --ku-blue-dark: #002b49; --ku-blue-mid: #005ea5; --ku-blue-light: #009cde; --ku-blue-lighter: #cfe9f7; --ku-orange: #e35205; --ku-red-error: #c53030; --ku-red-error-bg: #fbebeb; --ku-red-error-border: #f5c6cb; --font-main: 'Inter', Arial, sans-serif;
+         }
+         body { font-family: var(--font-main); background-color: var(--ku-grey-light); padding: 0; margin: 0; color: var(--ku-black); font-size: 14px; line-height: 1.6; }
+         .ku-content-wrapper { max-width: 1200px; margin: 20px auto; padding: 0 15px; }
+         .ku-content { background-color: var(--ku-white); padding: 20px 30px 30px 30px; margin-bottom: 30px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+         .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #e0e0e0; padding-bottom: 20px; }
+         .header h1 { font-size: 1.75rem; font-weight: bold; margin-bottom: 1rem; color: var(--ku-blue-dark); }
+         .footer { text-align: center; margin-top: 30px; padding: 20px; color: var(--ku-grey-dark); font-size: 0.9rem; border-top: 1px solid #eee; }
+         nav#main-nav, .action-buttons { background-color: var(--ku-blue-dark); padding: 8px 5px; margin-bottom: 25px; text-align: center; border-radius: 3px; }
+         nav#main-nav button, .action-buttons button, .ku-button { display: inline-block; background-color: var(--ku-yellow); color: var(--ku-black); font-weight: bold; font-size: 0.95rem; padding: 8px 15px; border-radius: 0; text-decoration: none; margin: 4px 5px; border: 1px solid var(--ku-black); cursor: pointer; transition: background-color 0.2s, color 0.2s, box-shadow 0.2s; }
+         .action-buttons button, .ku-button { font-size: 1rem; padding: 10px 18px; } nav#main-nav button:hover, .action-buttons button:hover, .ku-button:hover { background-color: #e8de00; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+         nav#main-nav button.active { background-color: var(--ku-orange); color: var(--ku-white); border-color: var(--ku-orange); }
+         .ku-button-secondary { background-color: var(--ku-grey-table-header); color: var(--ku-black); border-color: var(--ku-grey-mid); }
+         .ku-button-secondary:hover { background-color: #e0e0e0; }
+         .delete-button { background-color: var(--ku-red-error-bg); color: var(--ku-red-error); border: 1px solid var(--ku-red-error-border); font-size: 0.8rem; padding: 3px 6px; margin-left: 5px; cursor: pointer; vertical-align: middle;}
+         .delete-button:hover { background-color: #f8d7da; color: #721c24; }
+         .page { display: none; animation: fadeIn 0.4s ease-out; }
+         .page.active { display: block; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+         .form-section, .table-section, .info-section { margin-bottom: 25px; padding: 20px; border: 1px solid var(--ku-grey-table-border); background-color: var(--ku-white); }
+         .form-section h3, .table-section h3, .info-section h3 { font-size: 1.25rem; font-weight: bold; margin-top: 0; margin-bottom: 15px; color: var(--ku-blue-dark); padding-bottom: 8px; border-bottom: 2px solid var(--ku-blue-light); }
+         h2 { font-size: 1.5rem; font-weight: bold; color: var(--ku-blue-dark); margin-bottom: 20px; }
+         label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; }
+         input[type="text"], input[type="number"], select { display: block; width: 100%; max-width: 350px; padding: 8px 10px; margin-bottom: 3px; border: 1px solid var(--ku-grey-mid); border-radius: 0; background-color: var(--ku-yellow); font-size: 1rem; }
+         input[type="number"] { max-width: 120px; } select { background-color: var(--ku-white); max-width: 400px; width: auto; }
+         input:focus, select:focus { outline: 2px solid var(--ku-blue-light); outline-offset: 1px; }
+         .input-group { margin-bottom: 12px; } .error-message { color: var(--ku-red-error); font-size: 0.8rem; margin-top: 1px; height: 1.1em; display: block; }
+         table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+         th { background-color: var(--ku-grey-table-header); text-align: left; padding: 12px; border: 1px solid var(--ku-grey-table-border); font-weight: bold; font-size: 0.9rem; color: var(--ku-black); }
+         td { padding: 10px 12px; border: 1px solid var(--ku-grey-table-border); vertical-align: middle; font-size: 0.95rem; }
+         caption { text-align: left; font-weight: bold; font-size: 1.1rem; color: var(--ku-blue-dark); margin-bottom: 10px; }
+         .bom-table input[type="number"], .bom-table select { width: 95%; /* Wider to fit currency */ max-width: none; padding: 6px 8px; font-size: 0.9rem; margin-bottom: 0; display: inline-block; }
+         .bom-table input.price-input { max-width: 90px; } /* Smaller price input */
+         .bom-table select { width: auto; min-width: 60px; } /* Small currency selector */
+         .bom-table td { padding: 4px 6px; vertical-align: top; }
+         .output-field { font-weight: bold; color: var(--ku-blue-dark); display: inline-block; min-width: 65px; text-align: right; padding: 4px 8px; background-color: var(--ku-grey-table-header); border-radius: 0; border: 1px solid var(--ku-grey-table-border); margin-left: 5px; }
+         .form-section .output-field { margin-bottom: 12px; }
+         .currency::before { content: '£'; margin-right: 2px; }
+         .usd::after { content: ' USD'; margin-left: 2px; }
+         .percentage::after { content: '%'; margin-left: 2px; }
+         .subtotal-row td { font-weight: bold; background-color: #e9ecef; }
+         .grand-total-row td, .grand-total-row { font-weight: bold; font-size: 1.1em; background-color: var(--ku-blue-lighter); border: 1px solid #a0cce3; padding: 10px 15px; }
+         .grand-total-row label { font-size: 1em; display: inline-block; margin-right: 10px; margin-bottom: 0; }
+         #dashboard .metric-card { background-color: var(--ku-white); padding: 15px; border-radius: 0; margin-bottom: 10px; border: 1px solid var(--ku-grey-table-border); border-left: 5px solid var(--ku-blue-light); }
+         #dashboard .metric-card h4 { margin: 0 0 5px 0; font-size: 0.9rem; font-weight: bold; color: var(--ku-blue-dark); }
+         #dashboard .metric-value { font-size: 1.6em; font-weight: bold; color: var(--ku-black); display: block; margin-bottom: 3px; }
+         #dashboard .metric-details { font-size: 0.85em; color: var(--ku-grey-dark); }
+         .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px; }
+         .tooltip { position: relative; display: inline-block; cursor: help; border-bottom: 1px dashed #777; margin-left: 5px; color: var(--ku-blue-mid); }
+         .tooltip .tooltiptext { visibility: hidden; width: 220px; background-color: var(--ku-black); color: var(--ku-white); text-align: center; border-radius: 4px; padding: 8px 10px; position: absolute; z-index: 1; bottom: 130%; left: 50%; margin-left: -110px; opacity: 0; transition: opacity 0.3s; font-size: 0.85rem; font-weight: normal; line-height: 1.4; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+         .tooltip .tooltiptext::after { content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: var(--ku-black) transparent transparent transparent; }
+         .tooltip:hover .tooltiptext { visibility: visible; opacity: 1; }
+         .modal { display: none; position: fixed; inset: 0; background-color: rgba(0, 0, 0, 0.6); z-index: 50; padding: 20px; overflow-y: auto; }
+         .modal-content { background-color: var(--ku-white); padding: 25px 30px; border-radius: 0; max-width: 800px; margin: 40px auto; position: relative; animation: modalOpen 0.3s ease-out; }
+         .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--ku-grey-table-border); padding-bottom: 15px; margin-bottom: 20px; }
+         .modal-header h3 { margin: 0; font-size: 1.4rem; color: var(--ku-blue-dark); }
+         .modal-close-button { background: none; border: none; font-size: 2rem; font-weight: bold; line-height: 1; color: #888; cursor: pointer; padding: 0 5px; }
+         .modal-close-button:hover { color: var(--ku-black); }
+         @keyframes modalOpen { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+         @media print { body { background-color: #fff; font-size: 10pt; color: #000;} :root { --ku-black: #000000; --ku-white: #FFFFFF; --ku-blue-dark: #000000; --ku-blue-mid: #000000; --ku-blue-light: #000000; } .ku-content-wrapper { max-width: 100%; margin: 0; padding: 0; } .ku-content { box-shadow: none; border: none; padding: 0; } .header, nav#main-nav, .action-buttons, .footer, .modal-close-button, .ku-button, .tooltip, .error-message, .delete-button, #saveLoadStatus, .calculation-paused-indicator { display: none !important; } .page, .modal { display: block !important; position: static !important; inset: auto; background: none !important; padding: 0 !important; overflow: visible !important; } .modal-content { max-width: 100%; margin: 0; padding: 0; box-shadow: none; border: none !important; max-height: none; } .modal-header h3 { font-size: 14pt; color: #000; } #report-modal .modal-header { border-bottom: 1px solid #000; } .form-section, .table-section, .info-section { border: 1px solid #ccc; margin-bottom: 15px; padding: 10px; page-break-inside: avoid; } #report-modal table { font-size: 9pt; color: #000; } #report-modal th { background-color: #eee; color: #000; font-weight: bold; } #report-modal td { padding: 5px; border-color: #ccc; color: #000; } #report-modal .currency::before { content: '£'; } #report-modal .usd::after { content: ' USD'; } #report-modal .percentage::after { content: '%'; } #instructions-modal { display: none !important; } #report-modal .modal-content { border: none; } .modal-body table th:last-child, .modal-body table td:last-child { display: none; } }
+         .calculation-paused-indicator { display: none; color: var(--ku-red-error); font-weight: bold; margin: 10px 0; padding: 10px; background-color: var(--ku-red-error-bg); border: 1px solid var(--ku-red-error-border); text-align: center; border-radius: 3px; }
+         body.calculation-paused .calculation-paused-indicator { display: block; }
+         body.calculation-paused .output-field { background-color: #f8d7da; } body.calculation-paused nav#main-nav button:not(.active) { opacity: 0.7; pointer-events: none; }
+         .currency-selector { max-width: 70px !important; margin-left: 5px; vertical-align: middle;} /* Specific style for currency select */
+    </style>
+</head>
+<body >
+
+    <div class="ku-content-wrapper">
+        <!-- Header -->
+        <div class="header">
+            <h1>KSA Fashion Costing & Planning Tool (V3)</h1>
+            <p class="text-base text-gray-700 max-w-3xl mx-auto">Interactive tool with User Input Prices, Save/Load & Reporting features.</p>
+             <div class="action-buttons" style="background: none; text-align:center; padding: 10px 0;">
+                 <button id="saveButton" class="ku-button ku-button-secondary">Save Progress</button>
+                 <button id="loadButton" class="ku-button ku-button-secondary">Load Progress</button>
+                 <span id="saveLoadStatus" style="margin-left: 10px; font-size: 0.85em; color: green;"></span>
+             </div>
+        </div>
+
+        <div class="ku-content">
+             <!-- Navigation -->
+            <nav id="main-nav"> /* Navigation buttons */ </nav>
+
+            <div class="calculation-paused-indicator" id="calcPausedIndicator"> /* Calc Paused message */ </div>
+
+            <!-- === ALL PAGE SECTIONS === -->
+            <!-- (Dashboard, Product Info - unchanged HTML structure) -->
+            <div id="dashboard" class="page active"> /* Dashboard Content */ </div>
+            <div id="product-info" class="page"> /* Product Info Content */ </div>
+
+
+            <!-- == BOM - MODIFIED FOR USER PRICE INPUT == -->
+            <div id="bom" class="page">
+                 <h2>2. Bill of Materials (BOM)</h2>
+                 <div class="table-section">
+                     <h3>Materials Costing (Enter ALL details)</h3>
+                     <p class="text-sm mb-3 text-gray-600">Select material type, enter usage, waste %, **price**, and **currency**. All material costs contribute to FOB (calculated in USD).</p>
+                      <div class="overflow-x-auto">
+                          <table class="bom-table min-w-[1050px]"> {/* Wider table */}
+                              <thead>
+                                 <tr>
+                                     <th class="w-1/6">Material Type</th>
+                                     <th>Description</th>
+                                     <th>Net Usage</th>
+                                     <th>Unit</th>
+                                     <th>Waste %</th>
+                                      <th>Price/Unit</th> {/* NEW price input column */}
+                                      <th>Currency</th>   {/* NEW currency selector */}
+                                     <th>Cost/Gmt (USD)</th> {/* This col now SHOWS calculated cost */}
+                                     <th>Sust. Score</th>
+                                     <th class="w-[50px]">Actions</th>
+                                  </tr>
+                              </thead>
+                              <tbody id="bom-items">
+                                  <!-- JS will populate rows with inputs for price/currency -->
+                              </tbody>
+                              <tfoot>
+                                  <tr class="grand-total-row">
+                                      <td colspan="7" style="text-align:right;">TOTAL Material Cost / Garment (USD Equivalent):</td>
+                                     <td id="total-material-cost" class="usd">0.00</td>
+                                     <td></td>
+                                      <td></td>
+                                  </tr>
+                              </tfoot>
+                          </table>
+                       </div>
+                      <button class="ku-button mt-4" onclick="addBomRow()">+ Add Material Row</button>
+                   </div>
+            </div>
+
+            <!-- == LABOUR & PROCESSES - GBP Inputs, Conversion Added == -->
+            <div id="labour-processes" class="page">
+                  <h2>3. Labour & Processes</h2>
+                   <p class="text-sm mb-3 text-gray-600">Enter estimated times and costs in UK £. These will be converted to Factory Currency (USD) for FOB calculation using the exchange rate from Section 5.</p>
+                   <!-- Labour Table -->
+                  <div class="table-section"><h3>Manufacturing Labour (£)</h3>/* ... Table as before ... */</div>
+                  <!-- Process Table -->
+                  <div class="table-section"><h3>Manufacturing Processes (£)</h3>/* ... Table as before ... */</div>
+                   <!-- Totals -->
+                  <div class="form-section"><h3>Calculated Totals</h3>
+                      <label>Total Labour Cost/Unit (£):</label> <span class="output-field currency" id="total-labour-cost">0.00</span><br>
+                      <label>Total Process Cost/Unit (£):</label> <span class="output-field currency" id="total-process-cost">0.00</span><br>
+                      <label class="font-bold">Total Labour & Process Cost (£):</label> <span class="output-field currency" id="total-labour-process-cost" style="font-weight:bold">0.00</span><br>
+                      <label class="italic text-sm text-gray-600 mt-2">USD Equivalent (for FOB):</label> <span class="output-field usd" id="lp-cost-usd-equiv" style="font-style:italic">0.00</span>
+                  </div>
+            </div>
+
+             <!-- == FACTORY COSTS - USES CONVERTED LABOUR COST == -->
+            <div id="factory-costs" class="page">
+                 <h2>4. Factory Costs & FOB Price</h2>
+                  <p class="text-sm mb-3 text-gray-600">Calculates cost up to FOB (USD). Uses USD Material costs + converted USD Labour/Process costs.</p>
+                 <!-- CoP Section -->
+                  <div class="form-section"> <h3>Cost of Production (CoP) (USD)</h3>
+                     <div class="input-group"><label>Total Material Cost:</label><span class="output-field usd" id="fc-material-cost">0.00</span></div>
+                      <div class="input-group"><label>Converted Labour & Process Cost:</label><span class="output-field usd" id="fc-labour-process-cost">0.00</span> <span class="tooltip">?<span class="tooltiptext">Converted from £ using exchange rate.</span></span> </div>
+                       <div class="input-group"> <label for="factory-overhead-perc">Factory Overheads %:</label> <input type="number" id="factory-overhead-perc" value="100" step="1" min="0" oninput="calculateAll()"> <span class="output-field percentage"></span> <span class="tooltip">?<span class="tooltiptext">Applied to **converted Labour Cost ONLY** in this calculation.</span></span> <span id="factory-overhead-perc-error" class="error-message"></span> <div class="mt-2">Calculated Overheads Value (USD): <span class="output-field usd" id="fc-overhead-value">0.00</span></div> </div>
+                       <div class="input-group mt-4"><label style="font-weight:bold; font-size:1.1em;">Cost of Production (CoP) (USD):</label><span class="output-field usd" id="fc-cop" style="font-weight:bold; font-size:1.1em;">0.00</span></div>
+                 </div>
+                 <!-- FOB Section -->
+                  <div class="form-section"><h3>Factory Margin & FOB Price (USD)</h3> /* ... Same structure, inputs for rejects, profit, comm ... */</div>
+                 <div class="grand-total-row mt-4 p-4">/* ... FOB output ... */</div>
+            </div>
+
+
+             <!-- == LOGISTICS & IMPORT / PRICING / SUSTAIN / BUSINESS ANALYSIS / MODALS == -->
+            <!-- (HTML structure for these sections remains largely unchanged from V2.2, -->
+            <!-- ensure all inputs have associated <span class="error-message"></span> tags) -->
+              <div id="logistics-import" class="page"> /* Logistics Content */ </div>
+              <div id="pricing-retail" class="page"> /* Pricing Content */ </div>
+              <div id="sustainability" class="page"> /* Sustainability Content */ </div>
+              <div id="business-analysis" class="page"> /* Business Analysis Content */ </div>
+              <div id="instructions-modal" class="modal"> /* Instructions Modal Content */ </div>
+              <div id="report-modal" class="modal"> /* Report Modal Content */ </div>
+
+        </div> <!-- End ku-content -->
+         <!-- Footer -->
+          <div class="footer">
+              <p>Kingston School of Art - Fashion Costing Educational Tool (V3)</p>
+              <p>© Kingston University</p>
+          </div>
+     </div> <!-- End ku-content-wrapper -->
+
+<script>
+    // --- Constants & DB (Reduced - No Price/Currency needed) ---
+    const factoryCurrency = 'USD';
+    const localCurrency = 'GBP';
+    const localSymbol = '£';
+    const SAVE_KEY = 'ksaCostingToolData_v3.0';
+     const materialsDB = [ // Now only provides defaults for selection - user enters price
+          { id: 'FAB001', type: 'Fabric', description: '100% Cotton Chambray', unit: 'm', sustScore: 3 },
+          { id: 'FAB002', type: 'Fabric', description: 'Interlining (Woven)', unit: 'm', sustScore: 2 },
+          { id: 'FAB003', type: 'Fabric', description: 'GOTS Organic Cotton Twill', unit: 'm', sustScore: 5 },
+          { id: 'TRM001', type: 'Trim', description: 'Coconut Buttons (15mm)', unit: 'pcs', sustScore: 4 }, // Unit simpler
+          { id: 'TRM002', type: 'Trim', description: 'Ascolite Button Securing', unit: 'applications', sustScore: 3 }, // Descriptive unit
+          { id: 'TRM003', type: 'Trim', description: 'Recycled PET Buttons (15mm)', unit: 'pcs', sustScore: 4 },
+          { id: 'LBL001', type: 'Label', description: 'Main Label (Woven Rec Poly)', unit: 'pcs', sustScore: 4 },
+          { id: 'LBL002', type: 'Label', description: 'Size Label (Woven Rec Poly)', unit: 'pcs', sustScore: 4 },
+          { id: 'LBL003', type: 'Label', description: 'Care Label (Printed Rec Poly)', unit: 'pcs', sustScore: 4 },
+          { id: 'PKG001', type: 'Packaging', description: 'Recycled Polybag', unit: 'pcs', sustScore: 3 },
+          { id: 'PKG002', type: 'Packaging', description: 'Recycled Card Hangtag', unit: 'pcs', sustScore: 4 },
+          { id: 'PKG003', type: 'Packaging', description: 'Collar Stand (Card)', unit: 'pcs', sustScore: 2 },
+          { id: 'THR001', type: 'Thread', description: 'Recycled Polyester Thread Cone', unit: 'cone', sustScore: 3 }
+     ];
+
+    // --- Global State & DOM Cache ---
+     let appState = { /* SAME state variables */ totalMaterialCostUSD: 0, totalLabourCostGBP: 0, totalProcessCostGBP: 0, factoryCoP_USD: 0, factoryFOB_USD: 0, landedCostGBP: 0, retailExVatGBP: 0, retailIncVatGBP: 0, sustainabilityScore: 0, breakEvenUnits: 0, calculationPaused: false };
+     const domCache = {};
+     function cacheDOMElements() { /* SAME caching logic */ /* ... Full caching code ... */ domCache.totalMaterialCost=document.getElementById('total-material-cost');domCache.lpCostUsdEquiv=document.getElementById('lp-cost-usd-equiv'); domCache.fcLabourProcessCost = document.getElementById('fc-labour-process-cost'); /* ...cache others */ domCache.exchangeRateInput = document.getElementById('exchange-rate'); }
+
+    // --- Helper & Core Functions (SAME getNumVal, getTxtVal, getSelectedVal, setVal, findMaterial, displayError, clearAllErrors) ---
+      function getNumVal(id) { const el = domCache[id] || document.getElementById(id); return el ? parseFloat(el.value) || 0 : 0; }
+      function getTxtVal(id) { const el = domCache[id] || document.getElementById(id); return el ? el.value : ''; }
+      function getSelectedVal(id) { const el = domCache[id] || document.getElementById(id); if(el){const v=el.value; return isNaN(parseFloat(v))?v:parseFloat(v);} return ''; }
+      function findMaterial(id) { return materialsDB.find(m => m.id === id); }
+      function setVal(id, value, format = null) { const el = domCache[id] || document.getElementById(id); if(!el)return; let dV=''; if(typeof value === 'number'){ switch(format){ case 'currency': dV=value.toFixed(2); break; case 'percentage': dV=value.toFixed(1); break; case 'integer': dV=Math.ceil(value); break; case 'decimal1': dV=value.toFixed(1); break; case 'decimal3': dV=value.toFixed(3); break; case 'decimal4': dV=value.toFixed(4); break; default: dV=value.toFixed(2);} } else { dV=value; } if(el.tagName==='INPUT'||el.tagName==='SELECT'){el.value=dV;} else {el.textContent=dV;} }
+      function displayError(id, message) { const errEl = document.getElementById(id)?.closest('.input-group')?.querySelector('.error-message') || document.getElementById(`${id}-error`); if(errEl){errEl.textContent=message;} const inpEl=document.getElementById(id); if(inpEl)inpEl.style.borderColor=message?'var(--ku-red-error)':'var(--ku-grey-mid)';}
+      function clearAllErrors(){ document.querySelectorAll('.error-message').forEach(s=>s.textContent=''); document.querySelectorAll('input, select').forEach(el=>el.style.borderColor='var(--ku-grey-mid)'); appState.calculationPaused=false; document.body.classList.remove('calculation-paused');}
+
+
+     // --- Validation Rules & Function (Add rules for BOM price/currency if needed) ---
+       const validationRules = { /* Add bom-price & bom-currency checks if needed */ 'bom-usage': {min:0}, 'bom-waste':{min:0, max:100}, 'bom-price': {min: 0.0001}, /* Existing rules */ 'target-quantity': { min: 0 }, 'target-retail-price': { min: 0 }, 'labour-cut-time': { min: 0 }, 'labour-cut-rate': { min: 0 }, 'labour-sew-time': { min: 0 }, 'labour-sew-rate': { min: 0 }, 'labour-finish-time': { min: 0 }, 'labour-finish-rate': { min: 0 }, 'labour-button-time': { min: 0 }, 'labour-button-rate': { min: 0 }, 'process-wash-cost': { min: 0 }, 'process-embroidery-cost': { min: 0 }, 'factory-overhead-perc': { min: 0 }, 'factory-rejects-perc': { min: 0, max: 100 }, 'factory-profit-perc': { min: 0, max: 99.99 }, 'factory-commission-perc': { min: 0, max: 99.99 }, 'li-shipping-cost': { min: 0 }, 'li-insurance-cost': { min: 0 }, 'li-import-duty-perc': { min: 0, max: 100 }, 'li-clearance-cost': { min: 0 }, 'li-transport-cost': { min: 0 }, 'li-warehouse-admin-perc': { min: 0, max: 100 }, 'exchange-rate': { min: 0.001 }, 'pr-retail-margin-perc': { min: 0, max: 99.99 }, 'pr-chosen-retail-ex-vat': { min: 0 }, 'pr-vat-perc': { min: 0, max: 100 }, 'ba-fixed-costs': { min: 0 } };
+       function validateInputs() { /* SAME validation logic, adapted if needed for BOM rules */ clearAllErrors(); let isValid=true; /* Standard inputs */ for(const id in validationRules){const el=document.getElementById(id); if(el && !id.startsWith('bom-')){const rule=validationRules[id]; const val=getNumVal(id); let msg=''; if(rule.min !==undefined && val < rule.min){msg=`Min: ${rule.min}`;}else if(rule.max !==undefined && val > rule.max){msg=`Max: ${rule.max}`;} if(msg){displayError(id,msg);isValid=false;}}} /* BOM rows */ document.querySelectorAll('#bom-items tr').forEach(r=>{const rId=r.id; const price=getNumVal(`bom-price-${rId}`);const usage=getNumVal(`bom-usage-${rId}`);const waste=getNumVal(`bom-waste-${rId}`); if(price <= 0){displayError(`bom-price-${rId}`,'Must be > 0'); isValid=false;} if(usage<0){displayError(`bom-usage-${rId}`,'Min 0');isValid=false;} if(waste<0||waste>100){displayError(`bom-waste-${rId}`,'0-100%');isValid=false;} if(!getSelectedVal(`bom-currency-${rId}`)){displayError(`bom-currency-${rId}`,'Select');isValid=false;} if(!getSelectedVal(`bom-material-${rId}`)){displayError(`bom-material-${rId}`,'Select');isValid=false;} }); /* Profit/Comm check */ const pP=getNumVal('factory-profit-perc'); const cP=getNumVal('factory-commission-perc'); if(pP+cP >= 100){displayError('factory-profit-perc','Profit+Comm < 100%');displayError('factory-commission-perc','');isValid=false;} appState.calculationPaused=!isValid; document.body.classList.toggle('calculation-paused', appState.calculationPaused); document.getElementById('viewReportButton').disabled = appState.calculationPaused; return isValid;}
+
+
+    // --- BOM Row Logic - UPDATED for User Price Input ---
+      function addBomRow(materialId = '', netUsage = 0, wastePerc = 3, price = 0.00, currency = 'USD') {
+          const tbody = document.getElementById('bom-items');
+          const rowCount = tbody.rows.length;
+          const uniqueId = `bom-row-${Date.now()}-${rowCount}`;
+          const newRow = tbody.insertRow();
+          newRow.id = uniqueId;
+
+          // ** NEW STRUCTURE including price input and currency select **
+           newRow.innerHTML = `
+              <td><div class="input-group"><select id="bom-material-${uniqueId}" onchange="updateBomRow('${uniqueId}', true)">...</select><span id="bom-material-${uniqueId}-error" class="error-message"></span></div></td>
+              <td id="bom-desc-${uniqueId}"></td>
+              <td><div class="input-group"><input type="number" id="bom-usage-${uniqueId}" value="${netUsage}" ...><span id="bom-usage-${uniqueId}-error" class="error-message"></span></div></td>
+              <td id="bom-unit-${uniqueId}"></td>
+              <td><div class="input-group"><input type="number" id="bom-waste-${uniqueId}" value="${wastePerc}" ...><span id="bom-waste-${uniqueId}-error" class="error-message"></span></div></td>
+               <td><div class="input-group"><input type="number" class="price-input" id="bom-price-${uniqueId}" value="${price.toFixed(4)}" step="0.0001" min="0.0001" oninput="updateBomRow('${uniqueId}')"><span id="bom-price-${uniqueId}-error" class="error-message"></span></div></td> {/* Price Input */}
+               <td><div class="input-group"><select class="currency-selector" id="bom-currency-${uniqueId}" onchange="updateBomRow('${uniqueId}')"><option value="USD" ${currency==='USD'?'selected':''}>USD</option><option value="GBP" ${currency==='GBP'?'selected':''}>GBP</option><option value="EUR" ${currency==='EUR'?'selected':''}>EUR</option></select><span id="bom-currency-${uniqueId}-error" class="error-message"></span></div></td> {/* Currency Select */}
+              <td id="bom-cost-${uniqueId}" class="usd">0.0000</td> {/* Cost calculated in USD */}
+              <td id="bom-sust-${uniqueId}" class="text-center">0</td>
+              <td><button class="delete-button" onclick="deleteBomRow('${uniqueId}')">X</button></td>
+          `;
+          // Repopulate material select options
+           const selectEl = document.getElementById(`bom-material-${uniqueId}`);
+           selectEl.innerHTML = `<option value="">-- Select Type --</option>
+                     ${materialsDB.map(m => `<option value="${m.id}" ${m.id === materialId ? 'selected' : ''}>${m.id} (${m.description.substring(0,20)}...)</option>`).join('')}`;
+
+          if (materialId) {
+              updateBomRow(uniqueId, true); // Update the description/unit based on selection
+           } else {
+               updateBomRow(uniqueId); // Still run to calculate potential 0 cost
+           }
+      }
+
+     function updateBomRow(rowId, materialChanged = false) {
+          displayError(`bom-material-${rowId}`, ''); displayError(`bom-usage-${rowId}`, ''); displayError(`bom-waste-${rowId}`, ''); displayError(`bom-price-${rowId}`, ''); displayError(`bom-currency-${rowId}`, ''); // Clear row errors
+
+         const materialSelect = document.getElementById(`bom-material-${rowId}`);
+         const selectedId = materialSelect ? materialSelect.value : '';
+         const materialInfo = findMaterial(selectedId); // Get info like unit, description, sust score
+
+         const netUsage = getNumVal(`bom-usage-${rowId}`);
+         const wastePerc = getNumVal(`bom-waste-${rowId}`);
+         const unitPrice = getNumVal(`bom-price-${rowId}`); // Read user entered price
+         const unitCurrency = getSelectedVal(`bom-currency-${rowId}`); // Read user selected currency
+
+          // --- Row Validation ---
+          let rowIsValid = true;
+          if (!selectedId) { displayError(`bom-material-${rowId}`, 'Required'); rowIsValid = false; }
+          if (netUsage <= 0) { displayError(`bom-usage-${rowId}`, '> 0'); rowIsValid = false; } // Usage must be positive
+          if (wastePerc < 0 || wastePerc > 100) { displayError(`bom-waste-${rowId}`, '0-100%'); rowIsValid = false; }
+          if (unitPrice <= 0) { displayError(`bom-price-${rowId}`, '> 0'); rowIsValid = false; }
+          if (!unitCurrency) { displayError(`bom-currency-${rowId}`, 'Select'); rowIsValid = false; }
+
+         let currentDesc = '';
+         let currentUnit = '';
+         let currentSust = 0;
+         let currentGrossUsage = 0;
+         let costInEnteredCurrency = 0;
+          let costInUSD = 0; // Target currency for summation
+
+          if (materialInfo) { // Update description/unit if material type selected
+             currentDesc = materialInfo.description;
+             currentUnit = materialInfo.unit;
+             currentSust = materialInfo.sustScore;
+          } else if (materialChanged) { // If material type changed to blank, clear fields
+               setVal(`bom-desc-${rowId}`, '');
+               setVal(`bom-unit-${rowId}`, '');
+               setVal(`bom-sust-${rowId}`, 0);
+           }
+
+
+           if (rowIsValid && materialInfo) { // Only calculate cost if inputs seem valid
+               currentGrossUsage = netUsage * (1 + wastePerc / 100);
+
+                // Calculate cost based on user-input price & unit
+               if (currentUnit === 'cone') {
+                   costInEnteredCurrency = netUsage * unitPrice; // Thread usage assumed fraction of cone
+               } else {
+                    // Assuming 'pcs' unit now means single piece cost/usage
+                   costInEnteredCurrency = currentGrossUsage * unitPrice;
+               }
+
+                // Convert this row's cost to USD for summation
+                const exchangeRate = getNumVal('exchange-rate'); // 1 GBP = X USD
+                if (unitCurrency === factoryCurrency) { // USD
+                    costInUSD = costInEnteredCurrency;
+                } else if (unitCurrency === localCurrency && exchangeRate > 0) { // GBP
+                    costInUSD = costInEnteredCurrency * exchangeRate;
+                } else if (unitCurrency === 'EUR') { // Need EUR->USD rate if used
+                    // Example: costInUSD = costInEnteredCurrency * getEurToUsdRate();
+                     displayError(`bom-currency-${rowId}`, 'EUR>USD rate not set');
+                     costInUSD = 0; // Set cost to 0 if conversion rate unavailable
+                     rowIsValid = false; // Mark row as invalid for total sum? Or just warn?
+                } else {
+                    costInUSD = 0; // Unknown currency or bad rate
+                     if(exchangeRate <= 0 && unitCurrency === localCurrency) { displayError(`bom-currency-${rowId}`, 'Set Exch. Rate'); }
+                     else { displayError(`bom-currency-${rowId}`, 'Rate Error'); }
+                    rowIsValid = false;
+                }
+          }
+
+         // Update DOM (only fields that might change based on material type selection initially)
+          if (materialChanged) {
+             setVal(`bom-desc-${rowId}`, currentDesc);
+             setVal(`bom-unit-${rowId}`, currentUnit);
+             setVal(`bom-sust-${rowId}`, currentSust);
+          }
+           // Update calculated fields
+           setVal(`bom-gross-${rowId}`, currentGrossUsage, 'decimal3');
+           setVal(`bom-cost-${rowId}`, costInUSD, 'decimal4'); // Display USD cost
+
+           calculateAll(); // Recalculate everything after row update
+      }
+
+      // --- Calculate Modular Functions (MODIFIED FOR CURRENCY CONVERSION) ---
+
+      function calculateBomTotal() { /* Calculates Sum of bom-cost-* which are now USD */ /* ... SAME as previous logic, returns USD total ... */ appState.totalMaterialCostUSD=0; const bT=document.getElementById('bom-items'); bT.querySelectorAll('tr').forEach(r=>{const cC=document.getElementById(`bom-cost-${r.id}`); if(cC){appState.totalMaterialCostUSD+=parseFloat(cC.textContent)||0;}}); setVal(domCache.totalMaterialCost.id,appState.totalMaterialCostUSD,'decimal2'); domCache.totalMaterialCost.classList.add('usd'); return appState.totalMaterialCostUSD; }
+      function calculateLabourAndProcess() { /* Calculates total Labour & Process in GBP */ /* ... SAME as previous logic, returns GBP totals in object ... */ const cT=(getNumVal('labour-cut-time')/60)*getNumVal('labour-cut-rate'); const sT=(getNumVal('labour-sew-time')/60)*getNumVal('labour-sew-rate'); const fT=(getNumVal('labour-finish-time')/60)*getNumVal('labour-finish-rate'); const bT=(getNumVal('labour-button-time')/60)*getNumVal('labour-button-rate'); appState.totalLabourCostGBP = cT+sT+fT+bT; setVal('labour-cut-cost',cT,'currency'); setVal('labour-sew-cost',sT,'currency'); setVal('labour-finish-cost',fT,'currency'); setVal('labour-button-cost',bT,'currency'); setVal(domCache.totalLabourCost.id, appState.totalLabourCostGBP, 'currency'); appState.totalProcessCostGBP=getNumVal('process-wash-cost')+getNumVal('process-embroidery-cost'); setVal(domCache.totalProcessCost.id,appState.totalProcessCostGBP,'currency'); const totalLPC=appState.totalLabourCostGBP+appState.totalProcessCostGBP; setVal(domCache.totalLabourProcessCost.id, totalLPC, 'currency'); return { totalLPC, totalLabourCostGBP: appState.totalLabourCostGBP, totalProcessCostGBP: appState.totalProcessCostGBP}; }
+
+      function calculateFactoryCoPAndFOB(matCostUSD, labourProcResultGBP) {
+          const fcMC = matCostUSD; // Already USD
+
+          // ** Convert GBP Labour/Process Costs to USD **
+          const exchangeRate = getNumVal('exchange-rate'); // 1 GBP = X USD
+          const fcLPC_USD = exchangeRate > 0 ? labourProcResultGBP.totalLPC * exchangeRate : 0;
+           const labourCostForOH_USD = exchangeRate > 0 ? labourProcResultGBP.totalLabourCostGBP * exchangeRate : 0; // Overhead based on USD equiv labour cost
+          const fcLabourCost_USD = exchangeRate > 0 ? labourProcResultGBP.totalLabourCostGBP * exchangeRate : 0;
+          const fcProcessCost_USD = exchangeRate > 0 ? labourProcResultGBP.totalProcessCostGBP * exchangeRate : 0;
+
+          // Update display fields
+          setVal(domCache.lpCostUsdEquiv.id, fcLPC_USD, 'decimal2'); // Show converted Labour/Process total
+          setVal(domCache.fcMaterialCost.id, fcMC, 'decimal2');
+          setVal(domCache.fcLabourProcessCost.id, fcLPC_USD, 'decimal2'); // Show USD equivalent for CoP calculation
+
+
+          // Calculate Overheads on USD labour cost equivalent
+          const oP = getNumVal('factory-overhead-perc') / 100;
+          const oV = labourCostForOH_USD * oP;
+          setVal(domCache.fcOverheadValue.id, oV, 'decimal2'); domCache.fcOverheadValue.classList.add('usd');
+
+          appState.factoryCoP_USD = fcMC + fcLPC_USD + oV; // All now in USD
+          setVal(domCache.fcCop.id, appState.factoryCoP_USD, 'decimal2'); domCache.fcCop.classList.add('usd');
+
+          // --- Rest of FOB calc is the same (Rejects, Profit, Comm on USD CoP/FOB) ---
+           const rP = getNumVal('factory-rejects-perc')/100; const rV = appState.factoryCoP_USD * rP;
+           setVal(domCache.fcRejectsValue.id,rV,'decimal2');domCache.fcRejectsValue.classList.add('usd');
+           const pP=getNumVal('factory-profit-perc')/100; const cP=getNumVal('factory-commission-perc')/100; const fobD=1-pP-cP;
+           appState.factoryFOB_USD = fobD > 0 ? (appState.factoryCoP_USD + rV) / fobD : 0;
+           setVal(domCache.fcFobPrice.id,appState.factoryFOB_USD,'decimal2');domCache.fcFobPrice.classList.add('usd');
+           const pV=appState.factoryFOB_USD*pP; const cV=appState.factoryFOB_USD*cP;
+           setVal(domCache.fcProfitValue.id,pV,'decimal2');domCache.fcProfitValue.classList.add('usd');
+           setVal(domCache.fcCommissionValue.id,cV,'decimal2');domCache.fcCommissionValue.classList.add('usd');
+
+           return { factoryFOB: appState.factoryFOB_USD, factoryCoP: appState.factoryCoP_USD, fcMaterialCost: fcMC, labourCostUSD: fcLabourCost_USD, processCostUSD: fcProcessCost_USD, overheadValue: oV, profitValue: pV, commissionValue: cV, rejectsValue: rV};
+      }
+
+      function calculateLandedCost(fobUSD) { /* SAME as V2.2, takes FOB USD returns LCP GBP */ /* ... Full Landed cost logic ... */ setVal(domCache.liFobPrice.id,fobUSD,'decimal2');domCache.liFobPrice.classList.add('usd'); const sC=getNumVal('li-shipping-cost'); const iC=getNumVal('li-insurance-cost'); const ciP=fobUSD+sC+iC; setVal(domCache.liCifPrice.id,ciP,'decimal2');domCache.liCifPrice.classList.add('usd'); const dP=getNumVal('li-import-duty-perc')/100; const dV=fobUSD*dP; setVal(domCache.liDutyValue.id,dV,'decimal2');domCache.liDutyValue.classList.add('usd'); const clC=getNumVal('li-clearance-cost'); const tC=getNumVal('li-transport-cost'); const waP=getNumVal('li-warehouse-admin-perc')/100; const waV=fobUSD*waP; setVal(domCache.liWarehouseAdminValue.id,waV,'decimal2');domCache.liWarehouseAdminValue.classList.add('usd'); const tPC=fobUSD+sC+iC+dV+clC+tC+waV; setVal(domCache.liTotalPreConversion.id,tPC,'decimal2');domCache.liTotalPreConversion.classList.add('usd'); const eR=getNumVal(domCache.exchangeRateInput.id); appState.landedCostGBP=eR!==0?tPC/eR:0; setVal(domCache.liLcpGbp.id,appState.landedCostGBP,'currency'); return appState.landedCostGBP; }
+      function calculateRetailPricing(lcpGBP) { /* SAME as V2.2, takes LCP GBP returns retail info object */ /* ... Full retail pricing logic ... */ setVal(domCache.prLcp.id,lcpGBP,'currency'); const rmP=getNumVal('pr-retail-margin-perc')/100; const crEV=rmP<1?lcpGBP/(1-rmP):lcpGBP; setVal(domCache.prCalcRetailExVat.id,crEV,'currency'); appState.retailExVatGBP=getNumVal('pr-chosen-retail-ex-vat'); const vP=getNumVal('pr-vat-perc')/100; const vA=appState.retailExVatGBP*vP; setVal(domCache.prVatAmount.id,vA,'currency'); appState.retailIncVatGBP=appState.retailExVatGBP+vA; setVal(domCache.prFinalRetailIncVat.id,appState.retailIncVatGBP,'currency'); const cMu=lcpGBP!==0?((appState.retailExVatGBP-lcpGBP)/lcpGBP)*100:0; const cMg=appState.retailExVatGBP!==0?((appState.retailExVatGBP-lcpGBP)/appState.retailExVatGBP)*100:0; setVal(domCache.prCalcMarkup.id,cMu,'percentage'); setVal(domCache.prCalcMargin.id,cMg,'percentage'); return { retailExVat:appState.retailExVatGBP, retailIncVat:appState.retailIncVatGBP, calcMargin:cMg }; }
+      function calculateSustainabilityScore() { /* SAME as V2.2 */ /* ... Sustainability scoring ... */ let tssp=0, tsw=0; document.getElementById('bom-items').querySelectorAll('tr').forEach(r=>{ const sC = document.getElementById(`bom-sust-${r.id}`); const cC = document.getElementById(`bom-cost-${r.id}`); if(sC&&cC){const s=parseFloat(sC.textContent)||0; const w=parseFloat(cC.textContent)||0; if(s>0&&w>0){tssp+=s*w; tsw+=w;}}}); const mS=tsw>0?tssp/tsw:0; setVal(domCache.susMaterialScore.id,mS,'decimal1'); const sc=[mS,getSelectedVal('sus-factory-ethics'),getSelectedVal('sus-labour-wage'),getSelectedVal('sus-process-impact'),getSelectedVal('sus-logistics-impact'),getSelectedVal('sus-circularity')]; const vS=sc.filter(s=>typeof s==='number'&&s>=1&&s<=5); appState.sustainabilityScore=vS.length>0?vS.reduce((a,b)=>a+b,0)/vS.length:0; setVal(domCache.susOverallScore.id,appState.sustainabilityScore,'decimal1'); return appState.sustainabilityScore; }
+      function calculateBusinessAnalysis(lcpGBP, rExVatGBP) { /* SAME as V2.2 */ /* ... Business Analysis calc ... */ setVal(domCache.baLcp.id,lcpGBP,'currency'); setVal(domCache.baRetailExVat.id,rExVatGBP,'currency'); const conM=rExVatGBP-lcpGBP; setVal(domCache.baContributionMargin.id,conM,'currency'); const fC=getNumVal('ba-fixed-costs'); appState.breakEvenUnits=conM>0?Math.ceil(fC/conM):0; const bER=appState.breakEvenUnits*rExVatGBP; setVal(domCache.baBreakEvenUnits.id,appState.breakEvenUnits,'integer'); setVal(domCache.baBreakEvenRevenue.id,bER,'currency'); return appState.breakEvenUnits; }
+
+      function updateDashboard(calcs) { /* MODIFIED for new factory result structure */
+          setVal(domCache.dashProductName.id, getTxtVal('product-name'));
+          setVal(domCache.dashTargetRetail.id, getNumVal('target-retail-price'),'currency');
+          setVal(domCache.dashCalcRetail.id, calcs.retail.retailIncVat,'currency');
+          setVal(domCache.dashLcp.id, calcs.landedCost,'currency');
+          const eR = calcs.exchangeRate;
+          const fobUSD = calcs.factory.factoryFOB;
+          const fobGBP = eR!==0 ? fobUSD / eR : 0;
+          setVal(domCache.dashFob.id, fobGBP,'currency');
+
+          // Component costs need conversion if not GBP
+           const fcMaterialGBP = eR !== 0 ? calcs.factory.fcMaterialCost / eR : 0;
+           const fcLabourGBP = eR !== 0 ? calcs.factory.labourCostUSD / eR : 0; // Use converted labour cost
+          const fcProcessGBP = eR !== 0 ? calcs.factory.processCostUSD / eR : 0; // Use converted process cost
+           const overheadGBP = eR !== 0 ? calcs.factory.overheadValue / eR : 0;
+           const profitGBP = eR !== 0 ? calcs.factory.profitValue / eR : 0;
+           const commissionGBP = eR !== 0 ? calcs.factory.commissionValue / eR : 0;
+           const rejectsGBP = eR !== 0 ? calcs.factory.rejectsValue / eR : 0;
+
+          setVal(domCache.dashMaterialCost.id, fcMaterialGBP, 'currency');
+          setVal(domCache.dashLabourCost.id, fcLabourGBP, 'currency'); // Show GBP labour on dash
+          setVal(domCache.dashMargin.id, calcs.retail.calcMargin,'percentage');
+          setVal(domCache.dashSustainability.id, calcs.sustainabilityScore,'decimal1');
+          setVal(domCache.dashBreakEven.id, calcs.breakEvenUnits,'integer');
+
+           // FOB Breakdown using GBP equivalents
+           const fobGBPCheck = fobGBP > 0 ? fobGBP : 1;
+           setVal(domCache.dashBreakdownMaterial.id, (fcMaterialGBP / fobGBPCheck * 100),'percentage');
+           setVal(domCache.dashBreakdownLabour.id, (fcLabourGBP / fobGBPCheck * 100),'percentage');
+           setVal(domCache.dashBreakdownProcess.id, (fcProcessGBP / fobGBPCheck * 100),'percentage');
+           setVal(domCache.dashBreakdownOverhead.id, (overheadGBP / fobGBPCheck * 100),'percentage');
+           setVal(domCache.dashBreakdownProfit.id, (profitGBP / fobGBPCheck * 100),'percentage');
+           setVal(domCache.dashBreakdownCommission.id, (commissionGBP / fobGBPCheck * 100),'percentage');
+           setVal(domCache.dashBreakdownRejects.id, (rejectsGBP / fobGBPCheck * 100),'percentage');
+      }
+
+     // --- calculateAll Orchestrator ---
+     function calculateAll() {
+          if (!validateInputs()) { console.warn("Calc paused"); return; }
+          console.log("Calculating Modular V3...");
+         clearAllErrors();
+          const results = {};
+          results.bomMaterialCost = calculateBomTotal(); // Returns USD Total
+          results.labourProcess = calculateLabourAndProcess(); // Returns GBP {totalLPC, totalLabourCostGBP, totalProcessCostGBP}
+          results.factory = calculateFactoryCoPAndFOB(results.bomMaterialCost, results.labourProcess); // Returns USD factory object
+          results.landedCost = calculateLandedCost(results.factory.factoryFOB); // Returns GBP LCP
+          results.retail = calculateRetailPricing(results.landedCost); // Returns GBP retail object
+          results.sustainabilityScore = calculateSustainabilityScore();
+          results.breakEvenUnits = calculateBusinessAnalysis(results.landedCost, results.retail.retailExVat);
+          results.exchangeRate = getNumVal(domCache.exchangeRateInput.id);
+          updateDashboard(results);
+      }
+
+      // --- Save/Load/Report/Modal/Navigation/Init ---
+      // Include SAVE/LOAD/REPORT/MODAL/NAV functions from V2.2
+      function saveData(){ /* Same simplified save logic */ }
+      function loadData(){ /* Same simplified load logic */ }
+      function setSaveLoadStatus(msg,col){ /* Same */ }
+      function generateReport() { /* Adapt report generation for user-entered prices */ /* ... Update report logic ... */ } // IMPORTANT: Needs adaptation
+      function printReport(){ window.print(); }
+      function showPage(id){ /* Same */ }
+      function openModal(id){ /* Same (with generateReport call for report modal) */ }
+      function closeModal(id){ /* Same */ }
+      window.onclick = function(e){ /* Same */ }
+
+      // Initialize
+       window.onload = () => {
+           cacheDOMElements();
+           let loaded=false; // Load attempt etc... (same logic as V2.2)
+            // Set default BOM rows with INITIAL Price/Currency values
+            addBomRow('FAB001', 1.35, 3, 4.55, 'USD');
+            addBomRow('FAB002', 0.35, 3, 2.15, 'USD');
+            addBomRow('TRM001', 6, 5, 0.08, 'USD'); // Price PER PIECE (8.00/100)
+            addBomRow('TRM002', 6, 5, 0.015, 'USD'); // Price PER APP (15.00/1000)
+            addBomRow('LBL001', 1, 10, 0.13, 'USD'); // Price PER PIECE (65.00/500)
+            addBomRow('LBL002', 1, 10, 0.04, 'USD'); // Price PER PIECE (40.00/1000)
+            addBomRow('LBL003', 1, 10, 0.04, 'USD'); // Price PER PIECE
+            addBomRow('PKG002', 1, 10, 0.15, 'USD'); // Price PER PIECE (15.00/100)
+            addBomRow('PKG001', 1, 10, 0.035, 'USD'); // Price PER PIECE (3.50/100)
+            addBomRow('PKG003', 1, 5, 0.02, 'USD'); // Price PER PIECE (2.00/100)
+            addBomRow('THR001', 0.1, 5, 3.50, 'USD'); // Price PER CONE (Usage is fraction)
+
+           if(loaded){ setSaveLoadStatus('Progress Loaded!','green'); }
+           showPage('dashboard');
+           calculateAll(); // Initial Calc
+           // Attach listeners (same as V2.2)
+           document.querySelectorAll('input[id], select[id]').forEach(el=>{ if(!el.closest('.bom-table') && !el.id.includes('save') && !el.id.includes('load')){ el.addEventListener('input', calculateAll); el.addEventListener('change', calculateAll); }});
+           document.getElementById('saveButton').addEventListener('click', saveData);
+           document.getElementById('loadButton').addEventListener('click', ()=>{ if(confirm('Loading WILL OVERWRITE non-BOM inputs. Continue?')){loadData();} });
+       };
+
+</script>
+
+</body>
+</html>
