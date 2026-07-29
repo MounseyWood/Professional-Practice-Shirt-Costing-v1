@@ -367,7 +367,48 @@ the two. A landing hub page can come later if a third tool appears.
 
 ---
 
-## 8. Sources
+## 8. Verification pass on the default figures
+
+The first build shipped with defaults sourced from trade guidance but not individually
+verified. A second pass checked the figures a student is most likely to take at face value,
+and the outcome is recorded in the tool itself — Guide section 9 lists every default with its
+basis and how much to trust it, so students learn to demand provenance rather than just
+receiving it.
+
+What changed:
+
+- **Real Living Wage was out of date.** The tool flagged rates below £12.60; the 2025/26 rates
+  are **£13.45 UK and £14.80 London**, announced October 2025 and effective April 2026. Now
+  corrected, with a second warning band between the UK and London rates.
+- **Yarn price gained a verifiable anchor.** Z Hinchliffe British lambswool 2/17Nm sells at
+  £14.99 per 500 g cone at retail — **£29.98/kg for a single cone**. The £22/kg trade default
+  sits sensibly below that, and the retail cone price is now documented as the ceiling. A
+  2/17Nm entry was added to the library at the verified price.
+- **Returns figure made precise.** UK online clothing returns ran about **23.6% in 2025**
+  against 19.3% for e-commerce overall, with fashion generally quoted at 25–40%.
+- **Duty now points at the authority.** Knitted jumpers fall under heading **6110**; 12% is
+  common but rate depends on the exact commodity code and any trade preference, so the hint
+  links the UK Integrated Online Tariff rather than asserting a figure.
+- **Order quantity corroborated.** UK knitters quote around 60 per size or **~300 pieces** for
+  a competitive commercial price — which is what the worked example uses.
+- **End-to-end sanity check against the market.** The best available test of the whole chain is
+  whether the retail price it produces matches real garments. A UK-made lambswool crew sold
+  DTC on thin margins retails around **£87** (Community Clothing: knitted in Scotland, made up
+  in Hawick, cut and sew); premium British fully fashioned sits at **£150–250**; luxury
+  cashmere £300+. The tool's worked example produces £218 on the wholesale model and £116 on
+  DTC with cut-and-sew — both inside the right ranges. This comparison is now Guide section 8,
+  because it teaches the business-model point better than the prose does: Community Clothing's
+  jumper is cheap because it sells direct, not because it is worse.
+
+**Honest limitation carried forward:** the percentages and structural relationships rest on
+consistent trade practice and are solid. The **absolute hourly rates are the softest figures
+in the tool** — particularly the £14/hr machine rate, which is an estimate. The tool says so
+explicitly and tells students that if they can get one real quote, it should be the machine
+rate or the yarn price. Two derived constructs are also labelled as models rather than data:
+the expected-wears estimate (no published dataset gives wear counts per garment type) and the
+circularity index weightings (our own teaching device, not an industry standard).
+
+## 9. Sources
 
 - [Textile Learner — consumption and costing for fully fashioned knitwear](https://textilelearner.net/consumption-and-costing-for-fully-fashioned-knitwear/)
 - [Textile Learning Platform — sweater gauge counting & yarn consumption](http://textilelearningplatform.blogspot.com/2016/09/sweater-gauge-counting-yarn-consumption.html)
@@ -382,6 +423,19 @@ the two. A landing hub page can come later if a third tool appears.
 - [In House Made — pricing for wholesale, DTC & retail](https://inhousemade.com/blogs/news/clothing-brand-pricing-strategy)
 - [Ellen MacArthur Foundation — circular fashion overview](https://www.ellenmacarthurfoundation.org/topics/fashion/overview)
 - [Textile School — circular economy in textiles](https://www.textileschool.com/29243/the-circular-economy-in-textiles-redefining-sustainability-in-fashion/)
+
+Verification pass:
+
+- [Living Wage Foundation — calculating the Real Living Wage 2025](https://www.livingwage.org.uk/calculating-real-living-wage-london-and-rest-uk-2025)
+- [Real Living Wage rises to £13.45 nationally, £14.80 in London for 2025/26](https://progress-sports.co.uk/real-living-wage-jumps-to-13.45-nationally.80-in-london-for-2025-26)
+- [Yarn On Cone — Z Hinchliffe British lambswool 2/17Nm, 500 g cone](https://yarnoncone.co.uk/product-category/wool/z-hinchliffe/lambswool-2-17nm/)
+- [Paul James Knitwear — on Z Hinchcliffe & Sons lambswool](https://www.pauljamesknitwear.com/blogs/journal/our-yarns-100-british-lamsbwool-by-z-hinchcliffe-sons)
+- [JM Knitwear — lambswool jumper manufacturing and minimums](https://jmknitwear.com/lambswool-jumper-manufacturing)
+- [Community Clothing — men's crew neck lambswool jumpers](https://communityclothing.co.uk/collections/mens-crew-neck-lambswool-jumpers)
+- [UK Integrated Online Tariff — commodity heading 6110](https://www.trade-tariff.service.gov.uk/commodities/6110111000)
+- [GOV.UK — classifying textile apparel](https://www.gov.uk/guidance/classifying-textile-apparel)
+- [Eightx — UK e-commerce return rate benchmark](https://eightx.co/blog/uk-ecommerce-return-rate-benchmark)
+- [Richpanel — e-commerce return rates by category](https://www.richpanel.com/learn/ecommerce-return-rates)
 
 *All indicative figures are seed defaults for students to override with their own supplier
 quotes. They are teaching starting points, not price benchmarks.*

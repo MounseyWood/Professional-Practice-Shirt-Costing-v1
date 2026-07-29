@@ -75,6 +75,15 @@ studio machine. Quick save uses `localStorage`, which is tied to one browser on 
 - All default figures sit in a single `REF` object at the top of the first script block, each
   with a comment on where it came from. They are **indicative teaching starting points, not
   price benchmarks**, and students are expected to replace them with real supplier quotations.
+- **Guide section 9 lists every default with its basis and how far to trust it** — marked
+  *verified*, *anchored*, *well established*, *indicative*, *estimate*, or *our own
+  construction* — so students learn to demand provenance rather than just receive it. The
+  percentages and structural relationships rest on consistent trade practice; the absolute
+  hourly rates are the softest figures, and the tool says so.
+- **Guide section 8 gives real UK retail prices** to check an answer against, which is the one
+  check the arithmetic cannot do. It doubles as the clearest illustration of the business-model
+  point: a UK-made lambswool crew at £87 sold direct is not worse than one at £220 sold through
+  shops, it is a different business model.
 
 See [`KNITWEAR-TOOL-PLAN.md`](KNITWEAR-TOOL-PLAN.md) for the design rationale and sources.
 
